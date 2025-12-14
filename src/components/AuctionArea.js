@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import './AuctionArea.css';
 import PlayerPopup from './PlayerPopup';
 import TeamAssignment from './TeamAssignment';
@@ -20,19 +20,12 @@ function AuctionArea({
   lastAssigned
 }) {
   const categoryOrder = useMemo(
-    () => [
-      'new-to-game',
-      'wk-bat-bowl',
-      'best-batters-bowlers',
-      'allrounders-1',
-      'allrounders'
-    ],
+    () => ['new-to-game', 'wk-bat-bowl', 'best-batters-bowlers', 'allrounders-1', 'allrounders'],
     []
   );
 
   const pickNextPlayer = () => {
     if (unassignedPlayers.length === 0) return null;
-
     for (const cat of categoryOrder) {
       const candidates = unassignedPlayers.filter(
         p => (p.category || '').toLowerCase() === cat
@@ -42,7 +35,7 @@ function AuctionArea({
         return candidates[randomIndex];
       }
     }
-
+    // fallback to any
     const randomIndex = Math.floor(Math.random() * unassignedPlayers.length);
     return unassignedPlayers[randomIndex];
   };
@@ -66,9 +59,7 @@ function AuctionArea({
     }
 
     if (price < currentPlayer.basePrice) {
-      alert(
-        `Bid must be at least the base price (₹${currentPlayer.basePrice.toLocaleString('en-IN')}).`
-      );
+      alert(`Bid must be at least the base price (₹${currentPlayer.basePrice.toLocaleString('en-IN')}).`);
       return;
     }
 
@@ -78,16 +69,14 @@ function AuctionArea({
       return;
     }
 
+    // Call the parent state handler to finalize assignment
     onPlayerAssigned(currentPlayer.id, teamId, price);
+    // Clear the current player to move the auction forward
     setCurrentPlayer(null);
   };
 
   const handleCompleteAuction = () => {
-    if (
-      window.confirm(
-        'Are you sure you want to complete the auction? All unassigned players will be skipped.'
-      )
-    ) {
+    if (window.confirm('Are you sure you want to complete the auction? All unassigned players will be skipped.')) {
       onAuctionComplete();
     }
   };
@@ -104,18 +93,14 @@ function AuctionArea({
       const teamPlayers = getTeamPlayers(team.id);
       const remaining = teamBudgets[team.id] ?? teamBudgetLimit;
       const spent = teamBudgetLimit - remaining;
-
       return {
         'Team Name': team.name,
-        Captain: team.captain,
+        'Captain': team.captain,
         'Total Players': teamPlayers.length,
-        Players: teamPlayers.map(p => p.name).join(', '),
-        Roles: teamPlayers.map(p => p.role).join(', '),
-        Categories: teamPlayers.map(p => p.category || '').join(', '),
-        'Total Spend': teamPlayers.reduce(
-          (sum, p) => sum + (assignedPlayers[p.id]?.price || 0),
-          0
-        ),
+        'Players': teamPlayers.map(p => p.name).join(', '),
+        'Roles': teamPlayers.map(p => p.role).join(', '),
+        'Categories': teamPlayers.map(p => p.category || '').join(', '),
+        'Total Spend': teamPlayers.reduce((sum, p) => sum + (assignedPlayers[p.id]?.price || 0), 0),
         'Budget Remaining': remaining,
         'Budget Spent': spent
       };
@@ -125,14 +110,11 @@ function AuctionArea({
     if (unassigned.length > 0) {
       data.push({
         'Team Name': 'Unassigned Players',
-        Captain: '-',
+        'Captain': '-',
         'Total Players': unassigned.length,
-        Players: unassigned.map(p => p.name).join(', '),
-        Roles: unassigned.map(p => p.role).join(', '),
-        'Total Spend': unassigned.reduce(
-          (sum, p) => sum + (p.basePrice || 0),
-          0
-        ),
+        'Players': unassigned.map(p => p.name).join(', '),
+        'Roles': unassigned.map(p => p.role).join(', '),
+        'Total Spend': unassigned.reduce((sum, p) => sum + (p.basePrice || 0), 0),
         'Budget Remaining': '-',
         'Budget Spent': '-'
       });
@@ -141,7 +123,6 @@ function AuctionArea({
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Auction Snapshot');
-
     ws['!cols'] = [
       { wch: 22 },
       { wch: 18 },
@@ -152,7 +133,6 @@ function AuctionArea({
       { wch: 18 },
       { wch: 15 }
     ];
-
     XLSX.writeFile(wb, 'Auction_Snapshot.xlsx');
   };
 
@@ -161,47 +141,62 @@ function AuctionArea({
       <div className="auction-area">
         <div className="auction-header">
           <h2>Auction in Progress</h2>
-
           <div className="auction-stats">
             <div className="stat-box">
-              <span>Total Players</span>
-              <span>{totalPlayers}</span>
+              <span className="stat-label">Total Players</span>
+              <span className="stat-value">{totalPlayers}</span>
             </div>
             <div className="stat-box">
-              <span>Assigned</span>
-              <span>{assignedCount}</span>
+              <span className="stat-label">Assigned</span>
+              <span className="stat-value">{assignedCount}</span>
             </div>
             <div className="stat-box">
-              <span>Remaining</span>
-              <span>{remainingPlayers}</span>
+              <span className="stat-label">Remaining</span>
+              <span className="stat-value">{remainingPlayers}</span>
             </div>
             <div className="stat-box budget-box">
-              <span>Budget / Team</span>
-              <span>₹{teamBudgetLimit.toLocaleString('en-IN')}</span>
+              <span className="stat-label">Budget / Team</span>
+              <span className="stat-value">₹{teamBudgetLimit.toLocaleString('en-IN')}</span>
             </div>
+          </div>
+          <div className="team-budgets">
+            {teams.map(team => (
+              <div key={team.id} className="budget-pill">
+                <span className="budget-team-name">{team.name}</span>
+                <span className="budget-amount">₹{(teamBudgets[team.id] ?? teamBudgetLimit).toLocaleString('en-IN')}</span>
+              </div>
+            ))}
           </div>
         </div>
 
         <div className="auction-controls">
           <button
+            className="random-player-btn"
             onClick={handleRandomPlayer}
             disabled={remainingPlayers === 0}
           >
             📋 Select Random Player
           </button>
-
-          <button onClick={handleCompleteAuction}>
+          <button
+            className="finish-auction-btn"
+            onClick={handleCompleteAuction}
+          >
             🛑 Finish Auction
           </button>
-
-          <button onClick={handleDownloadResults}>
+          <button
+            className="download-snapshot-btn"
+            onClick={handleDownloadResults}
+          >
             📝 Download Snapshot
           </button>
         </div>
 
         {currentPlayer && (
           <div className="live-auction-row">
-            <PlayerPopup player={currentPlayer} show />
+            <PlayerPopup
+              player={currentPlayer}
+              show
+            />
             <TeamAssignment
               teams={teams}
               player={currentPlayer}
@@ -219,7 +214,10 @@ function AuctionArea({
         {remainingPlayers === 0 && (
           <div className="auction-complete-notice">
             <h3>🎉 All players have been assigned!</h3>
-            <button onClick={handleCompleteAuction}>
+            <button
+              className="view-results-btn"
+              onClick={handleCompleteAuction}
+            >
               View Final Results
             </button>
           </div>
