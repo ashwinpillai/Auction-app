@@ -105,8 +105,7 @@ function App() {
   return (
     <div className="App">
       <header className="app-header">
-        <h1>🏏 Cricket Auction ECL</h1>
-        <p>Manage your cricket auction with ease</p>
+        <h1>ECL Cricket Season 4 - 2026</h1>
       </header>
 
       <main className="app-main">
