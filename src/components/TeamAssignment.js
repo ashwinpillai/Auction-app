@@ -26,7 +26,7 @@ function TeamAssignment({
 
   const category = useMemo(() => (player.category || player.role || '').toLowerCase(), [player]);
 
-  // --- LOGIC: Define and calculate the increment ---
+  // --- LOGIC: Define and calculate the increment (UNCHANGED) ---
   const incrementalSteps = useMemo(() => ({
     'allrounders': 2000,
     'allrounders-1': 1000,
@@ -43,28 +43,22 @@ function TeamAssignment({
   };
   // --- END INCREMENT LOGIC ---
 
-  // NOTE: getCaptainCategory and getViceCaptainCategory functions are removed 
-  // as their logic is now integrated into teamCategoryCounts.
-
-  // --- REVISED LOGIC: COUNTS C/VC AND ALL ASSIGNED PLAYERS ---
+  
+  // --- REVISED LOGIC: COUNTS ONLY TOTAL ROSTER AND CATEGORY COUNTS ---
   const teamCategoryCounts = useMemo(() => {
     const counts = {};
     teams.forEach(team => {
       counts[team.id] = {
         allrounders: 0,
         allrounders1: 0,
-        allroundersP: 0,
-        categoryCounts: {} // Generic count for each category
+        categoryCounts: {}, // Total Roster Count for each category
       };
 
-      // Helper to count player in specific category fields
+      // Helper to count player in specific category fields (for total roster count)
       const countPlayerCategory = (cat, teamId) => {
         counts[teamId].categoryCounts[cat] = (counts[teamId].categoryCounts[cat] || 0) + 1;
         if (cat === 'allrounders-1') {
           counts[teamId].allrounders1 += 1;
-        }
-        if (cat === 'allrounders-p') {
-          counts[teamId].allroundersP += 1;
         }
         if (cat === 'allrounders') {
           counts[teamId].allrounders += 1;
@@ -73,13 +67,13 @@ function TeamAssignment({
 
       // Iterate over ALL players to establish the current roster size and category breakdown
       players.forEach(p => {
+          const cat = (p.category || p.role || '').toLowerCase();
           const isAssignedToThisTeam = assignedPlayers[p.id]?.teamId === team.id;
           const isCaptain = p.name.toLowerCase().trim() === team.captain.toLowerCase().trim();
           const isViceCaptain = team.viceCaptain && p.name.toLowerCase().trim() === team.viceCaptain.toLowerCase().trim();
           
-          // CRITICAL: Count the player if they are officially assigned OR they are a designated C/VC
+          // CRITICAL: Calculate TOTAL ROSTER count (C/VC + Assigned)
           if (isAssignedToThisTeam || isCaptain || isViceCaptain) {
-              const cat = (p.category || p.role || '').toLowerCase();
               countPlayerCategory(cat, team.id);
           }
       });
@@ -89,7 +83,7 @@ function TeamAssignment({
   // --- END REVISED COUNTING LOGIC ---
 
   
-  // --- REVISED LOGIC: CHECKING RULES (INCLUDING MAX 10 PLAYERS) ---
+  // --- REVISED LOGIC: CHECKING RULES (FLAT LIMITS ONLY) ---
   const canTakePlayer = (team) => {
     const teamCounts = teamCategoryCounts[team.id] || {};
     const categoryCounts = teamCounts.categoryCounts || {};
@@ -97,14 +91,14 @@ function TeamAssignment({
     // Calculate Roster Size
     const currentRosterSize = Object.values(categoryCounts).reduce((sum, count) => sum + count, 0);
 
-    // Check if the player currently being auctioned is already included in the count (i.e., if they are C/VC)
+    // Check if the player being auctioned is ALREADY counted on this team (as C/VC or assigned)
     const isPlayerAlreadyInCount = players.some(p => p.id === player.id && (
         assignedPlayers[p.id]?.teamId === team.id || 
         p.name.toLowerCase().trim() === team.captain.toLowerCase().trim() || 
         (team.viceCaptain && p.name.toLowerCase().trim() === team.viceCaptain.toLowerCase().trim())
     ));
     
-    // Only count the CURRENT player being auctioned if they are NOT already counted as C/VC
+    // Determine the increment: 0 if already counted, 1 if this is a new assignment
     const countIfNew = isPlayerAlreadyInCount ? 0 : 1; 
     
     const projectedRosterSize = currentRosterSize + countIfNew;
@@ -117,32 +111,40 @@ function TeamAssignment({
     }
     
     // ---------------------------------------------
-    // --- RULE 2: CATEGORY LIMITS ---
+    // --- RULE 2: CATEGORY LIMITS (FLAT MAXIMA) ---
     // ---------------------------------------------
-    const currentCategoryCount = categoryCounts[category] || 0;
-    const projectedCategoryCount = currentCategoryCount + countIfNew;
-
-    // 2.1 Allrounders (max 1 total)
+    
+    const projectedCategoryCount = (categoryCounts[category] || 0) + countIfNew;
+    
+    // 2.1 Allrounders (AR) - Max 2 Total (Flat Limit)
     if (category === 'allrounders') {
-      if (projectedCategoryCount > 1) return false;
+      if (projectedCategoryCount > 2) return false; 
     }
     
-    // 2.2 Allrounders-P (max 1 total)
-    if (category === 'allrounders-p') {
-      if (projectedCategoryCount > 1) return false;
-    }
-    
-    // 2.3 Allrounders-1 (max 2 total)
+    // 2.2 Allrounders-1 (AR1) - Max 2 Total (Flat Limit)
     if (category === 'allrounders-1') {
       if (projectedCategoryCount > 2) return false;
     }
+    
+    // 2.3 Best Batters/Bowlers (BB) - Max 2 Total (Flat Limit)
+    if (category === 'best-batters-bowlers') {
+      if (projectedCategoryCount > 2) return false;
+    }
+    
+    // 2.4 Allrounders-P (Removed/Blocked)
+    if (category === 'allrounders-p') {
+        return false;
+    }
+    
+    // 2.5 All Other Categories (WK, NEW-TO-GAME, WK-BAT-BOWL, etc.)
+    // No category limits apply here.
 
     return true; // All rules passed
   };
   // --- END REVISED RULE CHECKING LOGIC ---
 
 
-  // --- MODIFIED HANDLERS for 2-STEP PROCESS ---
+  // --- MODIFIED HANDLERS for 2-STEP PROCESS (UNCHANGED) ---
 
   const handleTentativeAssign = (teamId) => {
     setSoldTo(teamId);
@@ -173,7 +175,7 @@ function TeamAssignment({
     }
   };
 
-  // --- RENDER LOGIC ---
+  // --- RENDER LOGIC (UPDATED disableReason TEXT for clarity) ---
 
   if (isFinalized) {
     const soldTeam = teams.find(t => t.id === soldTo);
@@ -260,7 +262,7 @@ function TeamAssignment({
             const teamCounts = teamCategoryCounts[team.id] || {};
             const currentRosterSize = Object.values(teamCounts.categoryCounts || {}).reduce((sum, count) => sum + count, 0);
             
-            // Re-check Max 10 rule here for the display reason
+            // Check if the player being auctioned is ALREADY counted on this team
             const isPlayerAlreadyInCount = players.some(p => p.id === player.id && (
                 assignedPlayers[p.id]?.teamId === team.id || 
                 p.name.toLowerCase().trim() === team.captain.toLowerCase().trim() || 
@@ -268,7 +270,7 @@ function TeamAssignment({
             ));
             const countIfNew = isPlayerAlreadyInCount ? 0 : 1;
             const projectedRosterSize = currentRosterSize + countIfNew;
-
+            const projectedCategoryCount = (teamCounts.categoryCounts[category] || 0) + countIfNew; // Re-calculate projected category count here
 
             const budgetInsufficient = (teamBudgets[team.id] ?? teamBudgetLimit) < bidPrice;
             const invalidBid = bidPrice <= 0;
@@ -284,15 +286,19 @@ function TeamAssignment({
             } else if (budgetInsufficient) {
               disableReason = 'Insufficient budget';
             } else if (roleRestriction) {
-              // This is now purely category limit restriction
-              if (category === 'allrounders') {
-                disableReason = 'Allrounder limit reached (Max 1)';
-              } else if (category === 'allrounders-1') {
-                disableReason = 'Allrounders-1 limit reached (Max 2)';
+              // This is now purely category limit restriction based on flat maxima
+              if (category === 'allrounders' && projectedCategoryCount > 2) {
+                disableReason = 'Allrounder limit reached (Max 2 total)';
+              } else if (category === 'allrounders-1' && projectedCategoryCount > 2) {
+                disableReason = 'Allrounders-1 limit reached (Max 2 total)';
+              } else if (category === 'best-batters-bowlers' && projectedCategoryCount > 2) {
+                  disableReason = 'Best Batters/Bowlers limit reached (Max 2 total)';
               } else if (category === 'allrounders-p') {
-                disableReason = 'Allrounders-P limit reached (Max 1)';
+                disableReason = 'Allrounders-P category is removed';
               } else {
-                disableReason = 'Role limit reached';
+                // If roleRestriction is true but none of the above specific checks passed, 
+                // it means an unexpected restriction is active.
+                disableReason = 'Category restriction failed (Max 10 limit is the only restriction for this category)';
               }
             }
             
