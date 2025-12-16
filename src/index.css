@@ -17,7 +17,7 @@ body {
   
   /* 2. CORRECTED IMAGE PATH for Netlify */
   /* Ensure Cricket.png is placed in your project's public folder (or public/images) */
-  background-image: url('/Cricket.png'); 
+  background-image: url('https://ibb.co/Q7xFHP4j'); 
   
   /* If you put it in a subfolder like /public/images/ */
   /* background-image: url('/images/Cricket.png'); */
