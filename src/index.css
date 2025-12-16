@@ -10,12 +10,23 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+  /* 1. Base Gradient for deep color */
+  background: linear-gradient(135deg, #0f4c75 0%, #1e5e8e 100%); 
   min-height: 100vh;
+  
+  /* 2. Image Integration for Cricket Theme */
+  background-image: url('/Cricket.png'); 
+  background-size: cover; /* Ensures the image covers the entire screen */
+  background-attachment: fixed; /* Keeps image static during scroll */
+  background-position: center; /* Centers the image */
+  
+  /* 3. Blend Mode for Subtle, Dark Effect */
+  /* This overlays the gradient (#0f4c75) on top of the image */
+  background-blend-mode: overlay; 
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
