@@ -8,7 +8,10 @@
   background: white;
   border-radius: 20px;
   padding: 30px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.2); /* Deeper shadow */
+  /* ADDED: Background style to make the area interesting */
+  background: linear-gradient(to bottom right, #ffffff, #f0fdfa); 
+  border: 1px solid #e0f2f1;
 }
 
 .auction-header {
@@ -17,9 +20,18 @@
 }
 
 .auction-header h2 {
-  color: #667eea;
-  font-size: 2rem;
+  color: #16a085; /* Teal */
+  font-size: 2.2rem;
   margin-bottom: 20px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.auction-header h3 {
+    color: #e67e22; /* Orange Highlight */
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin-top: 10px;
+    letter-spacing: 0.5px;
 }
 
 .auction-stats {
@@ -30,13 +42,14 @@
 }
 
 .stat-box {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  /* NEW GRADIENT: Teal/Aqua */
+  background: linear-gradient(135deg, #1abc9c 0%, #16a085 100%);
   color: white;
   padding: 15px 25px;
   border-radius: 10px;
   text-align: center;
   min-width: 120px;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 15px rgba(26, 188, 156, 0.4); /* Teal shadow */
 }
 
 .stat-label {
@@ -53,7 +66,9 @@
 }
 
 .budget-box {
-  background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%);
+  /* NEW BUDGET HIGHLIGHT: Gold/Orange */
+  background: linear-gradient(135deg, #f39c12 0%, #d35400 100%);
+  box-shadow: 0 4px 15px rgba(243, 156, 18, 0.4);
 }
 
 .team-budgets {
@@ -65,8 +80,9 @@
 }
 
 .budget-pill {
-  background: rgba(102, 126, 234, 0.12);
-  border: 1px solid rgba(102, 126, 234, 0.3);
+  /* NEW PILL STYLE */
+  background: rgba(26, 188, 156, 0.1);
+  border: 1px solid rgba(26, 188, 156, 0.4);
   color: #333;
   padding: 10px 14px;
   border-radius: 30px;
@@ -78,12 +94,12 @@
 
 .budget-team-name {
   font-weight: 700;
-  color: #4c51bf;
+  color: #16a085; /* Teal */
 }
 
 .budget-amount {
   font-weight: 600;
-  color: #0f9d58;
+  color: #e67e22; /* Orange */
 }
 
 .auction-controls {
@@ -108,28 +124,31 @@
 }
 
 .random-player-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  /* NEW PRIMARY BUTTON: Teal */
+  background: linear-gradient(135deg, #1abc9c 0%, #16a085 100%);
+  box-shadow: 0 4px 15px rgba(26, 188, 156, 0.4);
 }
 
 .random-player-btn:hover:not(:disabled) {
   transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+  box-shadow: 0 6px 20px rgba(26, 188, 156, 0.5);
 }
 
 .finish-auction-btn {
-  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
-  box-shadow: 0 4px 15px rgba(220, 53, 69, 0.4);
+  /* RED for STOP */
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
 }
 
 .download-snapshot-btn {
-  background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%);
-  box-shadow: 0 4px 15px rgba(23, 162, 184, 0.35);
+  /* YELLOW/GOLD for Download */
+  background: linear-gradient(135deg, #f1c40f 0%, #f39c12 100%);
+  box-shadow: 0 4px 15px rgba(241, 196, 15, 0.35);
 }
 
 .finish-auction-btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(220, 53, 69, 0.5);
+  box-shadow: 0 6px 20px rgba(231, 76, 60, 0.5);
 }
 
 .random-player-btn:disabled {
@@ -141,7 +160,8 @@
 .auction-complete-notice {
   text-align: center;
   padding: 40px;
-  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  /* GREEN for SUCCESS */
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
   color: white;
   border-radius: 15px;
   margin-top: 30px;
@@ -155,7 +175,7 @@
 .view-results-btn {
   padding: 15px 40px;
   background: white;
-  color: #28a745;
+  color: #2ecc71;
   border: none;
   border-radius: 10px;
   font-size: 1.2rem;
@@ -177,47 +197,73 @@
   flex-wrap: wrap;
 }
 
-.live-side-panel {
-  background: white;
-  border-radius: 16px;
-  padding: 16px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e9ecef;
+/* The rest of the side-panel and notification styles follow the same color scheme: */
+
+.auction-notification-overlay {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(22, 160, 133, 0.8); /* Teal Dark Backdrop */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
 }
 
-.live-side-panel h4 {
-  margin-bottom: 12px;
-  color: #667eea;
+.auction-notification-modal {
+    background: #fff;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 15px 60px rgba(26, 188, 156, 0.6); 
+    max-width: 600px;
+    text-align: center;
+    border: 3px solid #1abc9c; /* Teal Border */
 }
 
-.side-team-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.auction-notification-modal h2 {
+    color: #e67e22; /* Orange Title */
+    margin-bottom: 25px;
+    font-size: 2rem;
+    font-weight: 900;
 }
 
-.side-team-card {
-  padding: 12px;
-  border-radius: 12px;
-  background: #f8f9fa;
-  border: 1px solid #edf0f5;
+.auction-notification-modal p {
+    color: #444;
+    margin-bottom: 25px;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    font-weight: 500;
 }
 
-.side-team-name {
-  font-weight: 700;
-  color: #4c51bf;
+.auction-notification-modal p strong, .auction-notification-modal p b {
+    color: #e74c3c; /* Red Highlight for UNSOLD warning */
+    font-weight: 700;
 }
 
-.side-team-captain {
-  font-size: 0.9rem;
-  color: #555;
+.auction-notification-modal button {
+    background: linear-gradient(135deg, #1abc9c 0%, #16a085 100%);
+    color: white;
+    padding: 15px 35px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(26, 188, 156, 0.4);
 }
 
-.side-team-budget {
-  margin-top: 6px;
-  font-weight: 600;
-  color: #0f9d58;
+.auction-notification-modal button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(26, 188, 156, 0.5);
 }
+
+
+/* ================================================= */
+/* ================== MEDIA QUERIES ================ */
+/* ================================================= */
 
 @media (max-width: 768px) {
   .auction-layout {
@@ -239,4 +285,3 @@
     align-items: center;
   }
 }
-
