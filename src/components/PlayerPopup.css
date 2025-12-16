@@ -1,10 +1,11 @@
 .player-popup {
   position: relative;
-  background: linear-gradient(145deg, #4f46e5 0%, #7c3aed 60%, #a855f7 100%);
+  /* NEW GRADIENT: Dark Teal to Darker Blue/Green */
+  background: linear-gradient(145deg, #16a085 0%, #1abc9c 40%, #138d75 100%);
   border-radius: 20px;
   padding: 32px;
   color: white;
-  box-shadow: 0 20px 60px rgba(79, 70, 229, 0.35);
+  box-shadow: 0 20px 60px rgba(26, 188, 156, 0.4);
   overflow: hidden;
   transform: translateY(20px) scale(0.96);
   opacity: 0;
@@ -31,11 +32,12 @@
 }
 
 .popup-glow {
+  /* Adjusted glow colors to fit the teal theme */
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.12), transparent 35%),
-              radial-gradient(circle at 80% 30%, rgba(255,255,255,0.10), transparent 35%),
-              radial-gradient(circle at 50% 80%, rgba(255,255,255,0.08), transparent 40%);
+  background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.15), transparent 35%),
+              radial-gradient(circle at 80% 30%, rgba(255,255,255,0.12), transparent 35%),
+              radial-gradient(circle at 50% 80%, rgba(255,255,255,0.10), transparent 40%);
   filter: blur(0px);
   z-index: 1;
 }
@@ -116,7 +118,7 @@
   display: block;
   font-size: 2.5rem;
   font-weight: 900;
-  color: #ffd700;
+  color: #f1c40f; /* Gold/Yellow for Price */
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   letter-spacing: 1px;
 }
