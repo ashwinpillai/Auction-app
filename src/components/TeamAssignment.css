@@ -28,7 +28,8 @@
   overflow-y: auto;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
   animation: slideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  border: 2px solid rgba(102, 126, 234, 0.2);
+  /* NEW BORDER COLOR */
+  border: 2px solid rgba(26, 188, 156, 0.2); 
 }
 
 .team-assignment-modal.compact {
@@ -55,7 +56,7 @@
 
 .team-assignment-modal h3 {
   text-align: center;
-  color: #667eea;
+  color: #1abc9c; /* Teal */
   font-size: 1.8rem;
   margin-bottom: 10px;
 }
@@ -75,26 +76,26 @@
   margin-bottom: 20px;
 }
 
-/* --- REVISED BIDDING CONTROL STYLES (for the increment button) --- */
+/* --- REVISED BIDDING CONTROL STYLES --- */
 .bid-input-compact {
   display: flex;
-  flex-direction: column; /* Stack bid group and increment info vertically */
+  flex-direction: column; 
   margin-bottom: 20px;
-  align-items: center; /* Center the entire control block */
+  align-items: center; 
 }
 
 .bid-input-compact label {
   font-weight: 600;
   color: #444;
   font-size: 1rem;
-  margin-bottom: 5px; /* Add space between label and input group */
+  margin-bottom: 5px; 
 }
 
 .bid-control-group {
   display: flex;
   align-items: center;
-  gap: 10px; /* Space between the input box and the button */
-  margin-bottom: 10px; /* Space before the category info */
+  gap: 10px; 
+  margin-bottom: 10px; 
 }
 
 .bid-input {
@@ -111,7 +112,7 @@
 
 .increment-btn {
   padding: 10px 14px;
-  background: #667eea; /* Primary color */
+  background: #f39c12; /* Orange Increment Button */
   color: white;
   border: none;
   border-radius: 10px;
@@ -124,49 +125,32 @@
 }
 
 .increment-btn:hover {
-  background: #5a6fe0;
+  background: #e67e22;
   transform: translateY(-1px);
 }
 
 .increment-btn:active {
-  background: #4e63d0;
+  background: #d35400;
   transform: translateY(0);
 }
 
 .category-increment-info {
   font-size: 0.9rem;
   color: #555;
-  background: #f0f4ff;
+  /* NEW INFO BACKGROUND */
+  background: #f0fdfa; 
   padding: 5px 10px;
   border-radius: 8px;
-  border: 1px dashed #667eea;
+  border: 1px dashed #1abc9c;
 }
 /* --- END REVISED BIDDING CONTROL STYLES --- */
 
 
 .bid-input:focus {
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+  border-color: #1abc9c;
+  box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.2);
 }
 
-.bid-hint {
-  font-size: 0.9rem;
-  color: #666;
-}
-
-.allrounder-note {
-  background: #fff3cd;
-  color: #856404;
-  padding: 8px 10px;
-  border-radius: 8px;
-  border: 1px solid #ffeeba;
-}
-
-.teams-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 20px;
-}
 
 .teams-grid-compact {
   display: grid;
@@ -174,20 +158,9 @@
   gap: 12px;
 }
 
-.team-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border: none;
-  border-radius: 15px;
-  padding: 25px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-align: center;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-}
-
 .team-card-compact {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  /* NEW BUTTON GRADIENT: Teal */
+  background: linear-gradient(135deg, #1abc9c 0%, #16a085 100%);
   color: white;
   border: none;
   border-radius: 12px;
@@ -195,23 +168,14 @@
   cursor: pointer;
   transition: all 0.3s ease;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
-}
-
-.team-card:hover {
-  transform: translateY(-5px) scale(1.05);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+  box-shadow: 0 2px 8px rgba(26, 188, 156, 0.3);
 }
 
 .team-card-compact:hover:not(.disabled) {
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 12px rgba(26, 188, 156, 0.4);
 }
 
-.team-card:active,
-.team-card-compact:active {
-  transform: translateY(-2px) scale(1.02);
-}
 
 .team-card:disabled,
 .team-card-compact.disabled {
@@ -222,27 +186,11 @@
   background: #ccc;
 }
 
-.team-name {
-  font-size: 1.3rem;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
 
 .team-name-compact {
   font-size: 1rem;
   font-weight: bold;
   margin-bottom: 6px;
-}
-
-.team-captain {
-  font-size: 0.9rem;
-  opacity: 0.9;
-}
-
-.team-budget {
-  margin-top: 10px;
-  font-weight: 600;
-  font-size: 0.95rem;
 }
 
 .team-budget-compact {
@@ -251,15 +199,6 @@
   opacity: 0.9;
 }
 
-.budget-warning {
-  margin-top: 8px;
-  background: rgba(255, 255, 255, 0.15);
-  color: #fff;
-  padding: 6px 10px;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  font-weight: 700;
-}
 
 .budget-warning-compact {
   margin-top: 4px;
@@ -272,7 +211,8 @@
 }
 
 .sold-badge {
-  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  /* Green success */
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
   color: white;
   padding: 12px 24px;
   border-radius: 25px;
@@ -280,17 +220,8 @@
   font-weight: 900;
   margin-bottom: 20px;
   display: inline-block;
-  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4);
   animation: pulse 1s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
 }
 
 .sold-details {
@@ -300,24 +231,16 @@
   border-radius: 12px;
 }
 
-.sold-to,
-.sold-price,
-.sold-captain {
-  margin: 12px 0;
-  font-size: 1.1rem;
-  color: #333;
-}
-
 .sold-to strong,
 .sold-price strong {
-  color: #667eea;
+  color: #1abc9c; /* Teal Highlight */
   font-size: 1.3rem;
 }
 
 .undo-button {
   margin-top: 20px;
   padding: 12px 24px;
-  background: #dc3545;
+  background: #e74c3c; /* Red */
   color: white;
   border: none;
   border-radius: 10px;
@@ -328,10 +251,52 @@
 }
 
 .undo-button:hover {
-  background: #c82333;
+  background: #c0392b;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
 }
+
+.confirm-button {
+  margin-top: 20px;
+  padding: 12px 24px;
+  background: #1abc9c; /* Teal */
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.confirm-button:hover {
+  background: #16a085;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(26, 188, 156, 0.4);
+}
+
+/* --- NEW UNSOLD BUTTON STYLING --- */
+.unsold-button {
+  margin-top: 20px;
+  padding: 12px 24px;
+  background: #95a5a6; /* Grey/silver color */
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%; 
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.unsold-button:hover {
+  background: #7f8c8d;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+/* --- END NEW UNSOLD BUTTON STYLING --- */
+
 
 @media (max-width: 768px) {
   .team-assignment-overlay {
